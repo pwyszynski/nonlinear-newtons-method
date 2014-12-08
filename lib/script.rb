@@ -1,10 +1,10 @@
 require 'matrix'
 # Zwraca macierz Jakobiana
 def Jakobian(x, y)
-	a = 6*x^2
+	a = 6*x*x
 	b = -2*y
-	c = y^3
-	d = 3*x*(y^2)-1
+	c = y*y*y
+	d = 3*x*(y*y)-1
 
 	j = Matrix.columns([[a, c],[b, d]])
 
@@ -12,8 +12,8 @@ def Jakobian(x, y)
 end
 
 def FofX(x, y)
-	a = 2*x^3 - y^2 - 1
-	b = x*y^3 - y - 4
+	a = 2*x*x*x - y*y - 1
+	b = x*y*y*y - y - 4
 
 	f = Matrix.column_vector([a, b])
 
@@ -38,13 +38,20 @@ end
 
 
 #MAIN
+results = Array.new
 
 puts "Podaj początkowe wartości:"
 puts "x0 = "
 firstX = gets.chomp.to_i
 puts "y0 = "
 firstY = gets.chomp.to_i
+puts "Podaj ilość iteracji"
+n = gets.chomp.to_i
 
-w = GofX(firstX,firstY)
+results[0] = GofX(firstX,firstY)
 
-puts "#{w}"
+for i in (1...n) do
+	results[i] = GofX(results[i-1].element(0,0), results[i-1].element(1,0))
+end
+
+print results
